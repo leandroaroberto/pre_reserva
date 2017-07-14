@@ -20,3 +20,7 @@ Route::get('/','pre_reservaController@index');
 Route::post('/','pre_reservaController@gravar');
 
 
+//google calendar test
+
+Route::resource('gcalendar', 'gCalendarController');
+Route::get('oauth', ['as' => 'oauthCallback', 'uses' => 'gCalendarController@oauth']);
