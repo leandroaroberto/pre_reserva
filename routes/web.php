@@ -17,6 +17,6 @@
 
 Route::get('/','pre_reservaController@index');
 
-Route::post('/gravar','pre_reservaController@gravar');
+Route::post('/','pre_reservaController@gravar');
 
 
