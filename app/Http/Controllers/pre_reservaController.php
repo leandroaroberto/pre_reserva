@@ -57,6 +57,7 @@ class pre_reservaController extends Controller
         $pre_reserva_datas->save();
         
         
+        //return redirect()->action('pre_reservaController@index');
         return redirect()->action('pre_reservaController@index');
         
     }
