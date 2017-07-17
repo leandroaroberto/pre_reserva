@@ -3,8 +3,10 @@
 namespace ead\Http\Controllers;
 
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Mail;
 use ead\Pre_reserva;
 use ead\Pre_reserva_datas;
+
 
 class pre_reservaController extends Controller
 {
@@ -55,8 +57,10 @@ class pre_reservaController extends Controller
         $pre_reserva_datas->pre_reserva_id = $pre_reserva_id;
         
         if ($pre_reserva_datas->save()){            
-            $this->sendmail($request->all());            
-            return view('form')->with(['mensagem'=> 'Obrigado! Sua pré-reserva será analisada e entraremos em contato em breve.','css'=>'alert alert-info']);            
+            if ($this->sendMail($request->all()))
+                return view('form')->with(['mensagem'=> 'Obrigado! Sua pré-reserva será analisada e entraremos em contato em breve.','css'=>'alert alert-info']);            
+            else
+                return view('form')->with(['mensagem' =>'Erro ao enviar o e-mail. A operação foi cancelada. Tente novamente mais tarde.','css'=>'alert alert-danger']);
         }
         else
         {
@@ -100,12 +104,22 @@ class pre_reservaController extends Controller
         
         $message .= "</body></html>";
         
+        /*test sending some mail with swiftmailer*/
+    
+       
+        $transport = new \Swift_SendmailTransport('/usr/sbin/sendmail -bs');
+        $mailer = new \Swift_Mailer($transport);
+        $message = (new \Swift_Message($subject))
+                ->setFrom('leandro@leandroroberto.com.br')
+                ->setTo($to)
+                ->setBody($message);
+        $result = $mailer->send($message);
         
         
-        /*echo $subject . "<br>";
-        echo $message;*/
-        
-        //mail($to, $subject, $message, $headers);
+        /*if (mail($to, $subject, $message, $headers))
+            return 1;
+        else
+            return 0;*/
     }
     
     public function listarPedidos(){
