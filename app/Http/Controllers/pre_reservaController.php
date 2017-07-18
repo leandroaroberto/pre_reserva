@@ -3,7 +3,6 @@
 namespace ead\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Mail;
 use ead\Pre_reserva;
 use ead\Pre_reserva_datas;
 
@@ -20,7 +19,7 @@ class pre_reservaController extends Controller
         return view('form')->withMensagem('');
     }
     
-    public function gravar(Request $request){
+    public function gravar(Request $request){    
         $this->validate($request, [
         'nome' => 'required|max:50',
         'email' => 'required|max:100|e-mail',
@@ -111,11 +110,13 @@ class pre_reservaController extends Controller
         $mailer = new \Swift_Mailer($transport);
         $message = (new \Swift_Message($subject))
                 ->setFrom('leandro@leandroroberto.com.br')
-                ->setTo($to)
+		->setTo($to)
+		->setContentType('text/html')
                 ->setBody($message);
-        $result = $mailer->send($message);
-        
-        
+        if ($result = $mailer->send($message))
+            return 1;
+        else
+            return 0;
         /*if (mail($to, $subject, $message, $headers))
             return 1;
         else

@@ -23,7 +23,7 @@
     </div>
     @endif
 
-    {{ Form::open(['action' => 'pre_reservaController@gravar']) }}
+    {{ Form::open(['action' => 'pre_reservaController@gravar']) }}    
     <p>
     {{ Form::label('nome','Nome*:') }}
     {{ Form::text('nome','',['class'=>'form-control','required','placeholder'=>'Seu nome aqui']) }}
