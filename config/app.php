@@ -177,6 +177,8 @@ return [
         // ead\Providers\BroadcastServiceProvider::class,
         ead\Providers\EventServiceProvider::class,
         ead\Providers\RouteServiceProvider::class,
+        /*Spatie google calendar API */
+       Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class,
 
     ],
 
@@ -228,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
 
     ],
 

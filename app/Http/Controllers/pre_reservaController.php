@@ -5,6 +5,8 @@ namespace ead\Http\Controllers;
 use Illuminate\Http\Request;
 use ead\Pre_reserva;
 use ead\Pre_reserva_datas;
+use Spatie\GoogleCalendar\Event;
+use Carbon\Carbon;
 
 
 class pre_reservaController extends Controller
@@ -56,8 +58,12 @@ class pre_reservaController extends Controller
         $pre_reserva_datas->pre_reserva_id = $pre_reserva_id;
         
         if ($pre_reserva_datas->save()){            
-            if ($this->sendMail($request->all()))
+            if ($this->sendMail($request->all())){
+                if (! $this->calendar())
+                    return view('form')->with(['mensagem' =>'Erro ao acessar o Google Calendar. A operação foi cancelada. Tente novamente mais tarde.','css'=>'alert alert-danger']);
+                    
                 return view('form')->with(['mensagem'=> 'Obrigado! Sua pré-reserva será analisada e entraremos em contato em breve.','css'=>'alert alert-info']);            
+            }
             else
                 return view('form')->with(['mensagem' =>'Erro ao enviar o e-mail. A operação foi cancelada. Tente novamente mais tarde.','css'=>'alert alert-danger']);
         }
@@ -103,9 +109,6 @@ class pre_reservaController extends Controller
         
         $message .= "</body></html>";
         
-        /*test sending some mail with swiftmailer*/
-    
-       
         $transport = new \Swift_SendmailTransport('/usr/sbin/sendmail -bs');
         $mailer = new \Swift_Mailer($transport);
         $message = (new \Swift_Message($subject))
@@ -113,14 +116,11 @@ class pre_reservaController extends Controller
 		->setTo($to)
 		->setContentType('text/html')
                 ->setBody($message);
-        if ($result = $mailer->send($message))
-            return 1;
-        else
-            return 0;
-        /*if (mail($to, $subject, $message, $headers))
+        /*if ($result = $mailer->send($message))
             return 1;
         else
             return 0;*/
+        return 1; //test mode
     }
     
     public function listarPedidos(){
@@ -129,5 +129,20 @@ class pre_reservaController extends Controller
     
    //Método para pré-reserva no Google Calendar
     
+    public function calendar(){
+        $event = new Event;
+        
+        $event->name = "Pre-reserva teste ok!";
+        $event->startDateTime = \Carbon\Carbon::now();                
+        $event->endDateTime = \Carbon\Carbon::now()->addHour();
+        $event->addAttendee(['email'=> 'rleandro@g.unicamp.br']);        
+        $event->addAttendee(['email'=> 'leroberto@gmail.com']);
+        
+        if ($event->save())
+            return 1;
+        else
+            return 0;
+        
+    }
     
 }
