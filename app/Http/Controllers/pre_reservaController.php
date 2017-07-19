@@ -59,7 +59,7 @@ class pre_reservaController extends Controller
         
         if ($pre_reserva_datas->save()){            
             if ($this->sendMail($request->all())){
-                if (! $this->calendar())
+                if (! $this->calendar($request->all()))
                     return view('form')->with(['mensagem' =>'Erro ao acessar o Google Calendar. A operação foi cancelada. Tente novamente mais tarde.','css'=>'alert alert-danger']);
                     
                 return view('form')->with(['mensagem'=> 'Obrigado! Sua pré-reserva será analisada e entraremos em contato em breve.','css'=>'alert alert-info']);            
@@ -129,20 +129,49 @@ class pre_reservaController extends Controller
     
    //Método para pré-reserva no Google Calendar
     
-    public function calendar(){
+    public function calendar($dados){
         $event = new Event;
+        $evento = $this->getEvento($dados['evento']);
+        $event->name = "Pré-reserva ".$evento . " - " . $dados['professor'];
+        $data_reserva = explode("-",$dados['data_reserva']);
+        $ano = $data_reserva[0];
+        $mes = $data_reserva[1];
+        $dia = $data_reserva[2];
         
-        $event->name = "Pre-reserva teste ok!";
-        $event->startDateTime = \Carbon\Carbon::now();                
-        $event->endDateTime = \Carbon\Carbon::now()->addHour();
-        $event->addAttendee(['email'=> 'rleandro@g.unicamp.br']);        
-        $event->addAttendee(['email'=> 'leroberto@gmail.com']);
+        $horario = explode(":",$dados['horario']);
+        $horario = $horario[0];
+        
+        //$event->startDateTime = \Carbon\Carbon::create('2017','07','18','09','00','00','America/Sao_Paulo');                         
+        $event->startDateTime = \Carbon\Carbon::create($ano,$mes,$dia,$horario,"00","00","America/Sao_Paulo");                         
+        //Carbon::create($year, $month, $day, $hour, $minute, $second, $tz);
+        //$event->startDateTime = \Carbon\Carbon::now();                          
+        //$event->endDateTime = \Carbon\Carbon::now()->addHour();
+        $event->endDateTime = \Carbon\Carbon::create($ano,$mes,$dia,$horario + 3,"00","00","America/Sao_Paulo");                         
+        //$event->endDateTime = \Carbon\Carbon::create('2017','07','18','12','00','00','America/Sao_Paulo');
+        //$event->addAttendee(['email'=> $dados['email']]);    
+        $event->description = "Solicitante: ".$dados['nome']."\n";
+        $event->description .= "Evento: ". $evento. "\n";
+        $event->description .= "E-mail: ". $dados['email'];
+        //$event->addAttendee(['email'=> 'leroberto@gmail.com']);
         
         if ($event->save())
             return 1;
         else
             return 0;
         
+    }
+    
+    public function getEvento($evento){
+        switch ($evento):
+            case  "Qualificacao Doutorado" :
+                return "Qualificação de Doutorado";
+            case "Qualificacao Mestrado" :
+                return "Qualificação Mestrado";
+            case "Seminario":
+                return "Seminário";
+            default:
+                return $evento;            
+        endswitch;        
     }
     
 }
