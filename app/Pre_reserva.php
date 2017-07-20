@@ -9,7 +9,7 @@ class Pre_reserva extends Model
     //
     protected $table = "pre_reserva";
     
-    protected $filable = ['nome','email','fone','professor','evento','obs'];
+    protected $filable = ['nome','email','fone','professor','evento','obs','created_at'];
     protected $dates = ['deleted_at'];
     
     public function pre_reserva_datas()

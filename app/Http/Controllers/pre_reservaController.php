@@ -30,9 +30,7 @@ class pre_reservaController extends Controller
         'fone' => 'max:20',
         'data_reserva' => 'required|date',
         'horario' => 'required'
-    ]);
-        
-        //$dados = $request->all();
+        ]);
         
         $pre_reserva = new Pre_reserva();
         //$pre_reserva->fill($request->all());
@@ -42,6 +40,8 @@ class pre_reservaController extends Controller
         $pre_reserva->professor = $request->input('professor');
         $pre_reserva->evento = $request->input('evento');
         $pre_reserva->obs = $request->input('obs');
+        $created_at = date("Y-m-d H:i:s");
+        $pre_reserva->created_at = $created_at;
         
         $pre_reserva->save();
         
@@ -59,7 +59,7 @@ class pre_reservaController extends Controller
         
         if ($pre_reserva_datas->save()){            
             if ($this->sendMail($request->all())){
-                if (! $this->calendar($request->all()))
+                if (! $this->calendar($request->all(),$created_at))
                     return view('form')->with(['mensagem' =>'Erro ao acessar o Google Calendar. A operação foi cancelada. Tente novamente mais tarde.','css'=>'alert alert-danger']);
                     
                 return view('form')->with(['mensagem'=> 'Obrigado! Sua pré-reserva será analisada e entraremos em contato em breve.','css'=>'alert alert-info']);            
@@ -75,16 +75,8 @@ class pre_reservaController extends Controller
     
     private function sendMail($dados){
         //enviar e-mail com os dados da pré reserva
-        
-        
-        $to = "leroberto@gmail.com";
-        
-        $headers = "From: leroberto@gmail.com \r\n";
-        $headers .= "Reply-To: leroberto@gmail.com\r\n";
-        $headers .= "CC: rleandro@g.unicamp.br,leandro@leandroroberto.com.br\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-                
+       
+        $to = "rleandro@g.unicamp.br";
         
         $subject = "[EAD Pre-Reserva] Nova solicitação de pré-reserva";
         
@@ -96,10 +88,10 @@ class pre_reservaController extends Controller
         $data = explode("-",$dados['data_reserva']);
         $data = $data[2]."/".$data[1]."/".$data[0];
         //checar disponibilidade no calendário google $disponivel
-        $disponivel = "Disponível"; //api google calendar
+        $disponivel = "Disponível"; //api google calendar - falta implementar
         
         $message .= "<p>Data: <b>$data</b> Horário: <b>".$dados['horario']."</b></p>";
-        $message .= "<p>Disponibilidade na Agenda: <b><a href'#'>$disponivel</a></b></p>";
+        /*$message .= "<p>Disponibilidade na Agenda: <b><a href'#'>$disponivel</a></b></p>";*/
         $message .= "<p>Professor Responsável: <b>".$dados['professor']."</b></p>";
         $message .= "<p>Nome do Solicitante: <b>". $dados['nome']."</b></p>";
         $message .= "<p>E-mail: <b>". $dados['email']."</b></p>";
@@ -129,7 +121,8 @@ class pre_reservaController extends Controller
     
    //Método para pré-reserva no Google Calendar
     
-    public function calendar($dados){
+    public function calendar($dados,$created_at){
+        
         $event = new Event;
         $evento = $this->getEvento($dados['evento']);
         $event->name = "Pré-reserva ".$evento . " - " . $dados['professor'];
@@ -140,19 +133,15 @@ class pre_reservaController extends Controller
         
         $horario = explode(":",$dados['horario']);
         $horario = $horario[0];
-        
-        //$event->startDateTime = \Carbon\Carbon::create('2017','07','18','09','00','00','America/Sao_Paulo');                         
+                
         $event->startDateTime = \Carbon\Carbon::create($ano,$mes,$dia,$horario,"00","00","America/Sao_Paulo");                         
-        //Carbon::create($year, $month, $day, $hour, $minute, $second, $tz);
-        //$event->startDateTime = \Carbon\Carbon::now();                          
-        //$event->endDateTime = \Carbon\Carbon::now()->addHour();
-        $event->endDateTime = \Carbon\Carbon::create($ano,$mes,$dia,$horario + 3,"00","00","America/Sao_Paulo");                         
-        //$event->endDateTime = \Carbon\Carbon::create('2017','07','18','12','00','00','America/Sao_Paulo');
-        //$event->addAttendee(['email'=> $dados['email']]);    
+        
+        $event->endDateTime = \Carbon\Carbon::create($ano,$mes,$dia,$horario + 3,"00","00","America/Sao_Paulo");                                 
         $event->description = "Solicitante: ".$dados['nome']."\n";
         $event->description .= "Evento: ". $evento. "\n";
-        $event->description .= "E-mail: ". $dados['email'];
-        //$event->addAttendee(['email'=> 'leroberto@gmail.com']);
+        $event->description .= "E-mail: ". $dados['email']. "\n";
+        $event->description .= "Data de criação: ". $created_at;
+        
         
         if ($event->save())
             return 1;
