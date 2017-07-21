@@ -1,6 +1,6 @@
 # Pre-reserva EAD
 
-    Formulário de consulta de reserva das salas de videoconferência da EAD - FE com integração com o Google Calendar.
+    Formulário de consulta de reserva das salas de com integração com o Google Calendar.
     By Leandro A. Roberto
 
 ## Listagem dos métodos
