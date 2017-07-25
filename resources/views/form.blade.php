@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.content')
 @section('content')
 <h1>Pré-reserva salas de Videoconferência FE-UNICAMP</h1>
 

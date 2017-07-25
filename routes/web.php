@@ -26,3 +26,5 @@ Route::get('/gravar','pre_reservaController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('admin', 'adminController');
