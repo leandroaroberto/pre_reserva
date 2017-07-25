@@ -22,3 +22,7 @@ Route::post('/gravar','pre_reservaController@gravar');
 Route::get('/gravar','pre_reservaController@index');
 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
