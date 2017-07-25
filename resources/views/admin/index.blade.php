@@ -1,8 +1,32 @@
-@extends('layouts.app')
 @extends('layouts.admin')
 @section('admin')
     
-    <h3>Welcome to the Admin Zone!</h3>
-    <p>Teste</p>
-
+    <h3>Pré-reservas pendentes de aprovação</h3>
+    
+    <table class="table-bordered table-hover table-responsive" width="100%" align="center">
+        @if(count($dados) <= 0)
+        <p>Nenhuma pré-reserva pendente.</p>
+        @else
+            <tr>
+                <th>Data</th>
+                <th>Evento</th>
+                <th>Professor Responsável</th>
+                <th></tH>
+            </tr>        
+        
+            @foreach($dados as $dado)
+                <tr>                    
+                    <td>{{ $dado->data_reserva }}</td>            
+                    <td>{{ $dado->pre_reserva->evento }}</td>
+                    <td>{{ $dado->pre_reserva->professor }}</td>            
+                    <td>
+                        <a href="admin/{{$dado->id}}"><span class="glyphicon glyphicon-search"></span></a>                        
+                    </td>
+                </tr>
+            @endforeach             
+        @endif
+    </table>
+            
+        {{ $dados->links() }}
+    
 @endsection
