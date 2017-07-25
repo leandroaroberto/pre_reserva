@@ -16,11 +16,8 @@
                     <div class="navbar-right">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="">Home</a>
-                            </li>
-                            <li>
-                                <a href="">Listar todas</a>
-                            </li>
+                                <a href="/admin">Home</a>
+                            </li>                            
                             <li>
                                 {{ Form::open(['action'=>'Auth\LoginController@logout']) }}
                                 {{ Form::submit('Logout',['class'=>'btn btn-default']) }}

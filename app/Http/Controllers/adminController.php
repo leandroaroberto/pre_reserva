@@ -27,8 +27,8 @@ class adminController extends Controller
         //$dados = Pre_reserva::find($id);
         //$dados = Pre_reserva::find($id)->pre_reserva_datas;
         $dados = Pre_reserva::where('id',$id)->with('pre_reserva_datas')->get();
-        
-        return $dados;
+        return view('admin.info')->with(['dados'=>$dados]);
+        //return $dados;
     }
     
 }
