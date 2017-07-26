@@ -17,10 +17,32 @@ class adminController extends Controller
     }    
     
     public function index(){
-        $dados = Pre_reserva_datas::paginate(20);        
-        //return $dados;
+        $label = "pendentes de aprovação";
+        $dados = Pre_reserva_datas::where('status',0)->orderBy('data_reserva')->paginate(20);
+        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);
         
-        return view('admin.index')->with(['dados'=> $dados]);
+    }
+    
+    public function listarAprovadas(){
+        //Aprovada / Efetivada => status 1
+        $label = "aprovadas";
+        $dados = Pre_reserva_datas::where('status',1)->orderBy('data_reserva')->paginate(20);                
+        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);
+    }
+    
+    public function listarNegadas(){
+        //Não confirmadas - Datas liberadas =>status =2
+        //Apagar do google calendar???
+        $label = "não confirmadas";
+        $dados = Pre_reserva_datas::where('status',2)->orderBy('data_reserva')->paginate(20);   
+        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);
+   }
+    
+    public function listarReservaTecnica(){
+        //Reserva Técnica =>status = 3
+        $label = "reserva técnica";
+        $dados = Pre_reserva_datas::where('status',3)->orderBy('data_reserva')->paginate(20);                
+        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);        
     }
     
     public function show($id){

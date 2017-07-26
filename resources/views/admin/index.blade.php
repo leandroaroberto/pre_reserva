@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('admin')
     
-    <h3>Pré-reservas pendentes de aprovação</h3>
+<h3>Pré-reservas <b>{{ $label }}</b></h3>
     
     <table class="table-bordered table-hover table-responsive" width="100%" align="center">
         @if(count($dados) <= 0)
-        <p>Nenhuma pré-reserva pendente.</p>
+        <p>Nenhuma pré-reserva localizada.</p>
         @else
             <tr>
                 <th>Data</th>
@@ -20,7 +20,7 @@
                     <td>{{ $dado->pre_reserva->evento }}</td>
                     <td>{{ $dado->pre_reserva->professor }}</td>            
                     <td>
-                        <a href="admin/{{$dado->id}}"><span class="glyphicon glyphicon-search"></span></a>                        
+                        <a href="/admin/{{$dado->id}}"><span class="glyphicon glyphicon-search"></span></a>                        
                     </td>
                 </tr>
             @endforeach             

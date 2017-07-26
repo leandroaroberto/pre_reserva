@@ -11,13 +11,22 @@
     <nav class="navbar navbar-default navbar-static-top">
 
                     <div class="navbar-header">
-                        <h2>Admin - Gerenciar pré-reservas</h2>
+                        <h2><a href="/admin">Admin - Gerenciar pré-reservas</a></h2>
                     </div>
                     <div class="navbar-right">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="/admin">Home</a>
-                            </li>                            
+                                <a href="/admin">Pendentes</a>
+                            </li>
+                            <li>
+                                <a href="/admin/aprovadas">Aprovadas</a>
+                            </li>  
+                            <li>
+                                <a href="/admin/negadas">Não confirmadas</a>
+                            </li>
+                            <li>
+                                <a href="/admin/reservas">Reserva técnica</a>
+                            </li>  
                             <li>
                                 {{ Form::open(['action'=>'Auth\LoginController@logout']) }}
                                 {{ Form::submit('Logout',['class'=>'btn btn-default']) }}

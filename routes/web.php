@@ -25,6 +25,11 @@ Route::get('/gravar','pre_reservaController@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('admin/aprovadas', 'adminController@listarAprovadas');
+Route::get('admin/negadas', 'adminController@listarNegadas');
+Route::get('admin/reservas', 'adminController@listarReservaTecnica');
 
 Route::resource('admin', 'adminController');
+
