@@ -52,7 +52,7 @@
              'Qualificacao Doutorado' => 'Qualificação Doutorado',
              'Defesa Mestrado' => 'Defesa Mestrado',
              'Defesa Doutorado' => 'Defesa Doutorado',
-             'Otros' => 'Outros (especificar em observações)'         
+             'Outros' => 'Outros (especificar em observações)'         
          ],null,['required','class'=>'form-control','placeholder'=>'Escolha o tipo de evento']) }}
     </p>
     <p>

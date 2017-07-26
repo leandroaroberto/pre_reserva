@@ -124,7 +124,7 @@ class pre_reservaController extends Controller
         
         $event = new Event;
         $evento = $this->getEvento($dados['evento']);
-        $event->name = "Pré-reserva ".$evento . " - " . $dados['professor'];
+        $event->name = "[PENDENTE] Pré-reserva ".$evento . " - " . $dados['professor'];
         $data_reserva = explode("-",$dados['data_reserva']);
         $ano = $data_reserva[0];
         $mes = $data_reserva[1];
