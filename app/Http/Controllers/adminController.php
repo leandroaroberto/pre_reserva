@@ -32,7 +32,7 @@ class adminController extends Controller
     
     public function listarNegadas(){
         //Não confirmadas - Datas liberadas =>status =2
-        //Apagar do google calendar???
+        //Apagar do google calendar??? NEVER
         $label = "não confirmadas";
         $dados = Pre_reserva_datas::where('status',2)->orderBy('data_reserva')->paginate(20);   
         return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);
@@ -44,6 +44,13 @@ class adminController extends Controller
         $dados = Pre_reserva_datas::where('status',3)->orderBy('data_reserva')->paginate(20);                
         return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);        
     }
+    
+     public function listarPreReservadas(){
+        //pré-reservas aguardando formulário => status = 4
+        $label = "aguardando formulário";
+        $dados = Pre_reserva_datas::where('status',4)->orderBy('data_reserva')->paginate(20);   
+        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label]);
+   }  
     
     public function show($id){
         //$dados = Pre_reserva::find($id);

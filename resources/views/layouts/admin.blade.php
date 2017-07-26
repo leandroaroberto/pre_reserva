@@ -19,14 +19,19 @@
                                 <a href="/admin">Pendentes</a>
                             </li>
                             <li>
+                                <a href="/admin/aguardando-formulario">Aguardando formulário</a>
+                            </li> 
+                            <li>
                                 <a href="/admin/aprovadas">Aprovadas</a>
                             </li>  
+                                                         
                             <li>
                                 <a href="/admin/negadas">Não confirmadas</a>
                             </li>
                             <li>
                                 <a href="/admin/reservas">Reserva técnica</a>
-                            </li>  
+                            </li> 
+                            
                             <li>
                                 {{ Form::open(['action'=>'Auth\LoginController@logout']) }}
                                 {{ Form::submit('Logout',['class'=>'btn btn-default']) }}

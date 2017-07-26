@@ -30,6 +30,7 @@ Auth::routes();
 Route::get('admin/aprovadas', 'adminController@listarAprovadas');
 Route::get('admin/negadas', 'adminController@listarNegadas');
 Route::get('admin/reservas', 'adminController@listarReservaTecnica');
+Route::get('admin/aguardando-formulario', 'adminController@listarPreReservadas');
 
 Route::resource('admin', 'adminController');
 
