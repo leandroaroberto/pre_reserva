@@ -20,7 +20,7 @@
                     <td>{{ $dado->pre_reserva->evento }}</td>
                     <td>{{ $dado->pre_reserva->professor }}</td>            
                     <td>
-                        <a href="/admin/{{$dado->id}}"><span class="glyphicon glyphicon-search"></span></a>                        
+                        <a href="/admin/{{$dado->id}}?tipo={{$tipo}}"><span class="glyphicon glyphicon-search"></span></a>                        
                     </td>
                 </tr>
             @endforeach             

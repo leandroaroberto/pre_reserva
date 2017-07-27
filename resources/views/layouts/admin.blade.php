@@ -16,7 +16,7 @@
                     <div class="navbar-right">
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="/admin">Pendentes</a>
+                                <a href="/admin/pendentes">Pendentes</a>
                             </li>
                             <li>
                                 <a href="/admin/aguardando-formulario">Aguardando formulário</a>
@@ -29,7 +29,7 @@
                                 <a href="/admin/negadas">Não confirmadas</a>
                             </li>
                             <li>
-                                <a href="/admin/reservas">Reserva técnica</a>
+                                <a href="/admin/reserva-tecnica">Reserva técnica</a>
                             </li> 
                             
                             <li>
