@@ -33,5 +33,11 @@ Route::get('admin/reserva-tecnica', 'adminController@listarReservaTecnica');
 Route::get('admin/aguardando-formulario', 'adminController@listarPreReservadas');
 Route::get('admin/pendentes', 'adminController@listarPendentes');
 
+
+Route::put('admin/negadas','adminController@setNegadas');
+Route::put('admin/aguardando-formulario','adminController@setAguardandoFormulario');
+Route::put('admin/reserva-tecnica','adminController@setReservaTecnica');
+
+
 Route::resource('admin', 'adminController');
 

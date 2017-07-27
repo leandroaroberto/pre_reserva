@@ -26,7 +26,7 @@ class pre_reservaController extends Controller
         'email' => 'required|max:100|e-mail',
         'professor'=> 'required|max:50',
         'evento' => 'required',
-        'fone' => 'max:20',
+        'fone' => 'max:20|min:5',
         'data_reserva' => 'required|date',
         'horario' => 'required'
         ]);

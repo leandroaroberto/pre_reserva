@@ -63,7 +63,21 @@ class adminController extends Controller
         $dados = Pre_reserva::where('id',$id)->with('pre_reserva_datas')->get();
         
         return view('admin.info')->with(['dados'=>$dados, 'link'=>$link]);
-        //return $dados;
+    }
+    
+    public function setNegadas(Request $fom){
+        //return $form->input('id');
+        return "Pré-reserva Negada";
+    }
+    
+     public function setAguardandoFormulario(Request $fom){
+        //return $form->input('id');
+        return "Status: Aguardando formulário";
+    }
+    
+    public function setReservaTecnica(Request $fom){
+        //return $form->input('id');
+        return "Status: Reserva Técnica";
     }
     
 }
