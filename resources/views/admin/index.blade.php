@@ -2,6 +2,9 @@
 @section('admin')
     
 <h3>Pré-reservas <b>{{ $label }}</b></h3>
+@if($mensagem)
+{{$mensagem}}
+@endif
     
     <table class="table-bordered table-hover table-responsive" width="100%" align="center">
         @if(count($dados) <= 0)

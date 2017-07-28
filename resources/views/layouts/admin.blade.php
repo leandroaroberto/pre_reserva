@@ -13,8 +13,8 @@
                     <div class="navbar-header">
                         <h2><a href="/admin">Admin - Gerenciar pré-reservas</a></h2>
                     </div>
-                    <div class="navbar-right">
-                        <ul class="nav navbar-nav navbar-right">
+                    <div class="navbar-left">
+                        <ul class="nav navbar-nav navbar-left">
                             <li>
                                 <a href="/admin/pendentes">Pendentes</a>
                             </li>
@@ -31,8 +31,10 @@
                             <li>
                                 <a href="/admin/reserva-tecnica">Reserva técnica</a>
                             </li> 
-                            
                             <li>
+                                <a href="/admin/canceladas">Canceladas</a>
+                            </li> 
+                            <li class="">
                                 {{ Form::open(['action'=>'Auth\LoginController@logout']) }}
                                 {{ Form::submit('Logout',['class'=>'btn btn-default']) }}
                                 {{ Form::close()}}

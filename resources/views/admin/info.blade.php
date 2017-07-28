@@ -49,9 +49,13 @@
 
     @if($link == "pendentes")
     <p>
-        
-        {{ Form::open(['action'=>'adminController@setAguardandoFormulario','method'=>'PUT']) }}
+        <!-- Pendentes -->
+        {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
         {{ Form::hidden('id',$id)}}        
+        {{ Form::hidden('statusA','PENDENTE')}}
+        {{ Form::hidden('statusB','AGUARDANDO FORMULÁRIO')}}
+        {{ Form::hidden('metodo','adminController@setAguardandoFormulario')}}
+        {{ Form::hidden('retorno','adminController@listarPendentes')}}
         {{ Form::submit('Aprovar (Mudar status para Aguardando formulário)',['class'=>'btn btn-success center-block'])}}  
         {{ Form::close() }}
         <br />
@@ -65,8 +69,60 @@
         {{ Form::submit('Reserva Técnica', ['class'=>'btn btn-info center-block'])}}
         {{ Form::close() }}
     </p>
-
     @endif
+
+    @if($link == "aguardando-formulario")
+    <p>
+        <!-- Aguardando formulario -->
+        {{ Form::open(['action'=>'adminController@setAprovadas','method'=>'PUT']) }}
+        {{ Form::hidden('id',$id)}}        
+        {{ Form::submit('Aprovar pré-reserva',['class'=>'btn btn-success center-block'])}}  
+        {{ Form::close() }}
+        <br />
+        {{ Form::open(['action'=>'adminController@setNegadas','method'=>'PUT']) }}
+        {{ Form::hidden('id',$id)}}        
+        {{ Form::submit('Não Confirmar', ['class'=>'btn btn-info center-block'])}}
+        {{ Form::close() }}
+        <br />
+        {{ Form::open(['action'=>'adminController@setCanceladas','method'=>'PUT']) }}
+        {{ Form::hidden('id',$id)}}        
+        {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-danger center-block'])}}
+        {{ Form::close() }}
+    </p>
+    @endif
+    
+    @if($link == "aprovadas")
+    <p>
+        <!-- Aprovadas -->    
+        {{ Form::open(['action'=>'adminController@setCanceladas','method'=>'PUT']) }}
+        {{ Form::hidden('id',$id)}}        
+        {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-danger center-block'])}}
+        {{ Form::close() }}
+    </p>
+    @endif
+    
+    @if($link == "negadas")
+    <p>
+        <!-- negadas - Não Confirmadas -->
+        {{ Form::open(['action'=>'adminController@setAguardandoFormulario','method'=>'PUT']) }}
+        {{ Form::hidden('id',$id)}}        
+        {{ Form::submit('Mudar status para Aguardando formulário',['class'=>'btn btn-success center-block'])}}  
+        {{ Form::close() }}        
+    </p>
+    @endif
+    
+    @if($link == "reserva-tecnica")
+    <p>
+        <!-- reserva técnica -->
+        {{ Form::open(['action'=>'adminController@setCanceladas','method'=>'PUT']) }}
+        {{ Form::hidden('id',$id)}}        
+        {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-danger center-block'])}}
+        {{ Form::close() }}
+    </p>
+    @endif
+    
+    
+    
     <p>
         <a href="/admin/{{$link}}" class="center-block btn ">Voltar</a>    
     </p>

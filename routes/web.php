@@ -32,11 +32,16 @@ Route::get('admin/negadas', 'adminController@listarNegadas');
 Route::get('admin/reserva-tecnica', 'adminController@listarReservaTecnica');
 Route::get('admin/aguardando-formulario', 'adminController@listarPreReservadas');
 Route::get('admin/pendentes', 'adminController@listarPendentes');
+Route::get('admin/canceladas', 'adminController@listarCanceladas');
 
 
 Route::put('admin/negadas','adminController@setNegadas');
 Route::put('admin/aguardando-formulario','adminController@setAguardandoFormulario');
 Route::put('admin/reserva-tecnica','adminController@setReservaTecnica');
+Route::put('admin/aprovadas','adminController@setAprovadas');
+Route::put('admin/canceladas','adminController@setCanceladas');
+
+Route::post('admin/aguardando-formulario', 'adminController@showConfirm');
 
 
 Route::resource('admin', 'adminController');
