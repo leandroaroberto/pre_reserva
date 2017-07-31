@@ -8,7 +8,7 @@ class Pre_reserva_datas extends Model
 {
     //
     protected $table = "pre_reserva_datas";
-    protected $filable = ['pre_reserva_id','data_reserva','status'];
+    protected $filable = ['pre_reserva_id','data_reserva','status','gid'];
     protected $dates = ['deleted_at'];
     
     function Pre_reserva(){

@@ -5,7 +5,8 @@ namespace ead\Http\Controllers;
 use Illuminate\Http\Request;
 use ead\Pre_reserva;
 use ead\Pre_reserva_datas;
-
+use Spatie\GoogleCalendar\Event;
+use Carbon\Carbon;
 
 class adminController extends Controller
 {
@@ -17,13 +18,14 @@ class adminController extends Controller
     }    
     
     public function index(){        
-        return $this->listarPendentes();        
+        return $this->listarPendentes('');        
     }
     
     public function listarPendentes(){
-        $label = "pendentes de aprovação";
+        $label = "pendentes de aprovação";        
         $dados = Pre_reserva_datas::where('status',0)->orderBy('data_reserva')->paginate(20);
-        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label,'tipo' => 'pendentes','mensagem'=>'']);
+        
+        return view('admin.index')->with(['dados'=> $dados, 'label'=> $label,'tipo' => 'pendentes','mensagem'=> '']);        
     }
     
     
@@ -69,6 +71,8 @@ class adminController extends Controller
         //$dados = Pre_reserva::find($id)->pre_reserva_datas;
         $link = $request->get('tipo');
         $dados = Pre_reserva::where('id',$id)->with('pre_reserva_datas')->get();
+        //$eventos = $this->buscaGCalendar($dados);
+        
         
         return view('admin.info')->with(['dados'=>$dados, 'link'=>$link]);
     }
@@ -80,17 +84,34 @@ class adminController extends Controller
     
      public function setAguardandoFormulario(Request $form){
             $id = $form->input('id');
+            //$pre_reserva = Pre_reserva::find($id);
+            
             $dados = Pre_reserva_datas::find($id);
-            $dados->status = 4;
-            if ($dados->save()){
-                return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
-                //return view('admin.index')->with(['dados'=> $dados, 'label'=> $label,'tipo' => 'pendentes','mensagem'=>'']);
+            
+            //$dados2 = Pre_reserva::where('id',$id)->with('pre_reserva_datas')->find($id);
+            //$pre_reserva = Pre_reserva::find($id);
+            $dados->status = 4;                        
+            $gid = $dados->gid;
+            
+            //return $dados;
+            $result = $this->updateGCalendar($gid,$dados->status);
+            //return "novo título: $result";
+            
+            if ($result){
+                if ($dados->save()){
+                    return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
+                    //return view('admin.index')->with(['dados'=> $dados, 'label'=> $label,'tipo' => 'pendentes','mensagem'=>'']);
+                }
+                else
+                {
+                    //erro ao gravar
+                    return 0;
+                }                
             }
             else
             {
-                //erro ao gravar
-            }                
-            
+                return 0;
+            }
     }
     
     public function setReservaTecnica(Request $fom){
@@ -117,6 +138,38 @@ class adminController extends Controller
         $retorno = $dados->input('retorno');
         
         return view('admin.confirm')->with(['statusA'=>$a, 'statusB'=> $b, 'metodo'=> $metodo, 'id'=> $id, 'retorno'=>$retorno]);        
+    }
+    
+    
+    private function updateGCalendar($gid,$status){
+        //$calendarId = Event::get()->first()->id;
+        //$eventId = Event::get();
+        
+        /*$inicio = \Carbon\Carbon::create('2017','08','01','09',"00","00","America/Sao_Paulo");
+        $fim = \Carbon\Carbon::create('2017','08','01','14',"00","00","America/Sao_Paulo");
+        $evento = Event::get($inicio,$fim);
+        
+        
+        $calendarId = Event::get()->last()->id;*/
+        
+        //UPDATE Google Agenda
+        $event = Event::find($gid);
+        $titulo = $event->name;
+        switch ($status):
+            case 4 : 
+                $novoTitulo = explode("[PENDENTE]", $titulo);
+                $novoTitulo = $novoTitulo[1];
+                break;
+        endswitch;
+        
+        
+        $event->name = $novoTitulo;
+        if ($event->save())
+            return 1;
+        else
+            return 0;
+        
+       //return $evento;
     }
     
     

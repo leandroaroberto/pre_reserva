@@ -121,8 +121,6 @@
     </p>
     @endif
     
-    
-    
     <p>
         <a href="/admin/{{$link}}" class="center-block btn ">Voltar</a>    
     </p>

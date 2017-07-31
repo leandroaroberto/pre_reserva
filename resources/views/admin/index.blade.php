@@ -3,7 +3,7 @@
     
 <h3>Pré-reservas <b>{{ $label }}</b></h3>
 @if($mensagem)
-{{$mensagem}}
+<h1>{{$mensagem}}</h1>
 @endif
     
     <table class="table-bordered table-hover table-responsive" width="100%" align="center">
