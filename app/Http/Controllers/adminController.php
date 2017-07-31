@@ -63,17 +63,11 @@ class adminController extends Controller
         $label = "canceladas";
         $dados = Pre_reserva_datas::where('status',5)->orderBy('data_reserva')->paginate(20);   
         return view('admin.index')->with(['dados'=> $dados, 'label'=> $label, 'tipo' => 'canceladas','mensagem'=>'']);
-   }  
+   }     
    
-   
-    public function show($id, Request $request){
-        //$dados = Pre_reserva::find($id);
-        //$dados = Pre_reserva::find($id)->pre_reserva_datas;
+    public function show($id, Request $request){        
         $link = $request->get('tipo');
         $dados = Pre_reserva::where('id',$id)->with('pre_reserva_datas')->get();
-        //$eventos = $this->buscaGCalendar($dados);
-        
-        
         return view('admin.info')->with(['dados'=>$dados, 'link'=>$link]);
     }
     
@@ -84,23 +78,15 @@ class adminController extends Controller
     
      public function setAguardandoFormulario(Request $form){
             $id = $form->input('id');
-            //$pre_reserva = Pre_reserva::find($id);
-            
-            $dados = Pre_reserva_datas::find($id);
-            
-            //$dados2 = Pre_reserva::where('id',$id)->with('pre_reserva_datas')->find($id);
-            //$pre_reserva = Pre_reserva::find($id);
+            $dados = Pre_reserva_datas::find($id);            
             $dados->status = 4;                        
-            $gid = $dados->gid;
-            
-            //return $dados;
-            $result = $this->updateGCalendar($gid,$dados->status);
-            //return "novo título: $result";
+            $gid = $dados->gid;                        
+            $result = $this->updateGCalendar($gid,$dados->status);            
             
             if ($result){
                 if ($dados->save()){
-                    return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
-                    //return view('admin.index')->with(['dados'=> $dados, 'label'=> $label,'tipo' => 'pendentes','mensagem'=>'']);
+                    //return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
+                    return redirect('admin/pendentes');                    
                 }
                 else
                 {
@@ -110,6 +96,7 @@ class adminController extends Controller
             }
             else
             {
+                //erro google calendar
                 return 0;
             }
     }
