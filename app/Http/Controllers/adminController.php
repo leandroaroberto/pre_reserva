@@ -72,8 +72,29 @@ class adminController extends Controller
     }
     
     public function setNegadas(Request $fom){
-        //return $form->input('id');
-        return "Pré-reserva Negada";
+        //Status = 2
+        $id = $form->input('id');
+        $dados = Pre_reserva_datas::find($id);            
+        $dados->status = 2;                        
+        $gid = $dados->gid;                        
+        $result = $this->updateGCalendar($gid,$dados->status);            
+
+        if ($result){
+            if ($dados->save()){
+                //return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
+                return redirect('admin/pendentes');                    
+            }
+            else
+            {
+                //erro ao gravar
+                return 0;
+            }                
+        }
+        else
+        {
+            //erro google calendar
+            return 0;
+        }
     }
     
      public function setAguardandoFormulario(Request $form){

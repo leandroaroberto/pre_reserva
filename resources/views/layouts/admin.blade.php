@@ -11,28 +11,28 @@
     <nav class="navbar navbar-default navbar-static-top">
 
                     <div class="navbar-header">
-                        <h2><a href="/admin">Admin - Gerenciar pré-reservas</a></h2>
+                        <h2><a href="{{env('APP_URL')}}/admin">Admin - Gerenciar pré-reservas</a></h2>
                     </div>
                     <div class="navbar-left">
                         <ul class="nav navbar-nav navbar-left">
                             <li>
-                                <a href="/admin/pendentes">Pendentes</a>
+                                <a href="{{env('APP_URL')}}/admin/pendentes">Pendentes</a>
                             </li>
                             <li>
-                                <a href="/admin/aguardando-formulario">Aguardando formulário</a>
+                                <a href="{{env('APP_URL')}}/admin/aguardando-formulario">Aguardando formulário</a>
                             </li> 
                             <li>
-                                <a href="/admin/aprovadas">Aprovadas</a>
+                                <a href="{{env('APP_URL')}}/admin/aprovadas">Aprovadas</a>
                             </li>  
                                                          
                             <li>
-                                <a href="/admin/negadas">Não confirmadas</a>
+                                <a href="{{env('APP_URL')}}/admin/negadas">Não confirmadas</a>
                             </li>
                             <li>
-                                <a href="/admin/reserva-tecnica">Reserva técnica</a>
+                                <a href="{{env('APP_URL')}}/admin/reserva-tecnica">Reserva técnica</a>
                             </li> 
                             <li>
-                                <a href="/admin/canceladas">Canceladas</a>
+                                <a href="{{env('APP_URL')}}/admin/canceladas">Canceladas</a>
                             </li> 
                             <li class="">
                                 {{ Form::open(['action'=>'Auth\LoginController@logout']) }}

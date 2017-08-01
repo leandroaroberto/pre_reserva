@@ -122,7 +122,7 @@
     @endif
     
     <p>
-        <a href="/admin/{{$link}}" class="center-block btn ">Voltar</a>    
+        <a href="{{env('APP_URL')}}/admin/{{$link}}" class="center-block btn ">Voltar</a>    
     </p>
 
 @endsection
