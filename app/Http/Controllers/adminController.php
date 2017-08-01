@@ -71,18 +71,24 @@ class adminController extends Controller
         return view('admin.info')->with(['dados'=>$dados, 'link'=>$link]);
     }
     
-    public function setNegadas(Request $fom){
+    public function setNegadas(Request $form){
         //Status = 2
         $id = $form->input('id');
+        $retorno = $form->input('retorno');
+        
         $dados = Pre_reserva_datas::find($id);            
         $dados->status = 2;                        
         $gid = $dados->gid;                        
-        $result = $this->updateGCalendar($gid,$dados->status);            
-
+        
+        $result = $this->updateGCalendar($gid,$dados->status); 
+        //return $result;
+        
         if ($result){
             if ($dados->save()){
-                //return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
-                return redirect('admin/pendentes');                    
+                /*Exemplo com parâmetro - TESTAR
+                return redirect()->action(
+                $retorno, ['id' => 1]);*/
+                return redirect()->action($retorno);                
             }
             else
             {
@@ -99,6 +105,7 @@ class adminController extends Controller
     
      public function setAguardandoFormulario(Request $form){
             $id = $form->input('id');
+            $retorno = $form->input('retorno');        
             $dados = Pre_reserva_datas::find($id);            
             $dados->status = 4;                        
             $gid = $dados->gid;                        
@@ -107,7 +114,7 @@ class adminController extends Controller
             if ($result){
                 if ($dados->save()){
                     //return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
-                    return redirect('admin/pendentes');                    
+                    return redirect()->action($retorno);                    
                 }
                 else
                 {
@@ -122,17 +129,17 @@ class adminController extends Controller
             }
     }
     
-    public function setReservaTecnica(Request $fom){
+    public function setReservaTecnica(Request $form){
         //return $form->input('id'); 
         return "Status: Reserva Técnica";
     }
     
-    public function setAprovadas(Request $fom){
+    public function setAprovadas(Request $form){
         //return $form->input('id');
         return "Status: Aprovadas";
     }
     
-    public function setCanceladas(Request $fom){
+    public function setCanceladas(Request $form){
         //return $form->input('id');
         return "Status: Canceladas";
     }
@@ -150,34 +157,32 @@ class adminController extends Controller
     
     
     private function updateGCalendar($gid,$status){
-        //$calendarId = Event::get()->first()->id;
-        //$eventId = Event::get();
-        
-        /*$inicio = \Carbon\Carbon::create('2017','08','01','09',"00","00","America/Sao_Paulo");
-        $fim = \Carbon\Carbon::create('2017','08','01','14',"00","00","America/Sao_Paulo");
-        $evento = Event::get($inicio,$fim);
-        
-        
-        $calendarId = Event::get()->last()->id;*/
-        
         //UPDATE Google Agenda
         $event = Event::find($gid);
         $titulo = $event->name;
         switch ($status):
+            case 2 : 
+                $novoTitulo = explode("[PENDENTE]", $titulo);
+                //return count($novoTitulo);
+                if (count($novoTitulo) > 1)
+                    $novoTitulo = "[NÃO CONFIRMADO] ".$novoTitulo[1];
+                else
+                    $novoTitulo = "[NÃO CONFIRMADO] ".$titulo;
+                break;
             case 4 : 
                 $novoTitulo = explode("[PENDENTE]", $titulo);
-                $novoTitulo = $novoTitulo[1];
+                if (count($novoTitulo) > 1)
+                    $novoTitulo = $novoTitulo[1];
+                else
+                    $novoTitulo = $titulo;
                 break;
-        endswitch;
-        
+        endswitch;        
         
         $event->name = $novoTitulo;
         if ($event->save())
             return 1;
         else
-            return 0;
-        
-       //return $evento;
+            return 0;       
     }
     
     

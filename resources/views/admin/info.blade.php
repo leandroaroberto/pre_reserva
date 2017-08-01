@@ -59,8 +59,12 @@
         {{ Form::submit('Aprovar (Mudar status para Aguardando formulário)',['class'=>'btn btn-success center-block'])}}  
         {{ Form::close() }}
         <br />
-        {{ Form::open(['action'=>'adminController@setNegadas','method'=>'PUT']) }}
-        {{ Form::hidden('id',$id)}}        
+        {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
+        {{ Form::hidden('id',$id)}}
+        {{ Form::hidden('statusA','PENDENTE')}}
+        {{ Form::hidden('statusB','NÃO CONFIRMADO')}}
+        {{ Form::hidden('metodo','adminController@setNegadas')}}
+        {{ Form::hidden('retorno','adminController@listarPendentes')}}
         {{ Form::submit('Não Confirmar', ['class'=>'btn btn-danger center-block'])}}
         {{ Form::close() }}
         <br />
@@ -79,14 +83,18 @@
         {{ Form::submit('Aprovar pré-reserva',['class'=>'btn btn-success center-block'])}}  
         {{ Form::close() }}
         <br />
-        {{ Form::open(['action'=>'adminController@setNegadas','method'=>'PUT']) }}
-        {{ Form::hidden('id',$id)}}        
-        {{ Form::submit('Não Confirmar', ['class'=>'btn btn-info center-block'])}}
+        {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
+        {{ Form::hidden('id',$id)}}
+        {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
+        {{ Form::hidden('statusB','NÃO CONFIRMADO')}}
+        {{ Form::hidden('metodo','adminController@setNegadas')}}
+        {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
+        {{ Form::submit('Não Confirmar', ['class'=>'btn btn-danger center-block'])}}
         {{ Form::close() }}
         <br />
         {{ Form::open(['action'=>'adminController@setCanceladas','method'=>'PUT']) }}
         {{ Form::hidden('id',$id)}}        
-        {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-danger center-block'])}}
+        {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-info center-block'])}}
         {{ Form::close() }}
     </p>
     @endif

@@ -13,7 +13,8 @@
                     <div class="col-md-8 col-md-offset-4">
                         {{ Form::open(['action'=> $metodo,'method'=>'PUT']) }}
                         {{Form::submit('Sim',['class'=>'btn btn-success'])}}                        
-                        {{Form::hidden('id',$id)}}                          
+                        {{Form::hidden('id',$id)}} 
+                        {{Form::hidden('retorno',$retorno)}}
                         {{Form::close()}}
                         <br>
                         {{Form::open(['action'=>  $retorno,'method'=>'GET']) }}
