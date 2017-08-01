@@ -10,7 +10,8 @@ use Carbon\Carbon;
 
 class adminController extends Controller
 {
-    //
+    
+    //const STATUS = array([0 => '[PENDENTE]',1 => '',2 => '[NÃO APROVADA]',3 => '[RESERVA TÉCNICA]', 4 => '', 5 => '[CANCELADA]']);
     
      public function __construct()
     {
@@ -22,6 +23,7 @@ class adminController extends Controller
     }
     
     public function listarPendentes(){
+        //status => 0
         $label = "pendentes de aprovação";        
         $dados = Pre_reserva_datas::where('status',0)->orderBy('data_reserva')->paginate(20);
         
@@ -37,7 +39,7 @@ class adminController extends Controller
     }
     
     public function listarNegadas(){
-        //Não confirmadas - Datas liberadas =>status =2
+        //Não confirmadas - Datas liberadas =>status = 2
         //Apagar do google calendar??? NEVER
         $label = "não confirmadas";
         $dados = Pre_reserva_datas::where('status',2)->orderBy('data_reserva')->paginate(20);   
@@ -71,17 +73,30 @@ class adminController extends Controller
         return view('admin.info')->with(['dados'=>$dados, 'link'=>$link]);
     }
     
-    public function setNegadas(Request $form){
-        //Status = 2
+    public function setStatus(Request $form){
+        //$status => id do novo status
+        /*
+         * 0 - PENDENTE
+         * 1 - APROVADA
+         * 2 - NEGADA
+         * 3 - RESERVA TÉCNICA
+         * 4 - AGUARDANDO FORMULÁRIO
+         * 5 - CANCELADA
+         */
+        
         $id = $form->input('id');
         $retorno = $form->input('retorno');
+        $novoStatus = $form->input('novoStatus');
         
         $dados = Pre_reserva_datas::find($id);            
-        $dados->status = 2;                        
+        $dados->status = $novoStatus;                        
         $gid = $dados->gid;                        
         
         $result = $this->updateGCalendar($gid,$dados->status); 
-        //return $result;
+        //$result = trim($result);
+        //teste
+        return $result;
+        
         
         if ($result){
             if ($dados->save()){
@@ -101,89 +116,62 @@ class adminController extends Controller
             //erro google calendar
             return 0;
         }
-    }
-    
-     public function setAguardandoFormulario(Request $form){
-            $id = $form->input('id');
-            $retorno = $form->input('retorno');        
-            $dados = Pre_reserva_datas::find($id);            
-            $dados->status = 4;                        
-            $gid = $dados->gid;                        
-            $result = $this->updateGCalendar($gid,$dados->status);            
-            
-            if ($result){
-                if ($dados->save()){
-                    //return redirect('admin/pendentes')->withMensagem('Pré-reserva atualizada com sucesso.');
-                    return redirect()->action($retorno);                    
-                }
-                else
-                {
-                    //erro ao gravar
-                    return 0;
-                }                
-            }
-            else
-            {
-                //erro google calendar
-                return 0;
-            }
-    }
-    
-    public function setReservaTecnica(Request $form){
-        //return $form->input('id'); 
-        return "Status: Reserva Técnica";
-    }
-    
-    public function setAprovadas(Request $form){
-        //return $form->input('id');
-        return "Status: Aprovadas";
-    }
-    
-    public function setCanceladas(Request $form){
-        //return $form->input('id');
-        return "Status: Canceladas";
-    }
+    }    
     
     
     public function showConfirm(Request $dados){        
         $a = $dados->input('statusA');
         $b = $dados->input('statusB');
+        $novoStatus = $dados->input('novoStatus');
         $metodo = $dados->input('metodo');
         $id = $dados->input('id');
         $retorno = $dados->input('retorno');
         
-        return view('admin.confirm')->with(['statusA'=>$a, 'statusB'=> $b, 'metodo'=> $metodo, 'id'=> $id, 'retorno'=>$retorno]);        
+        return view('admin.confirm')->with(['statusA'=>$a, 'statusB'=> $b, 'metodo'=> $metodo, 'id'=> $id, 'retorno'=>$retorno, 'novoStatus'=> $novoStatus]);        
     }
     
     
-    private function updateGCalendar($gid,$status){
+    private function updateGCalendar($gid,$novoStatus){
         //UPDATE Google Agenda
         $event = Event::find($gid);
         $titulo = $event->name;
-        switch ($status):
-            case 2 : 
-                $novoTitulo = explode("[PENDENTE]", $titulo);
-                //return count($novoTitulo);
-                if (count($novoTitulo) > 1)
-                    $novoTitulo = "[NÃO CONFIRMADO] ".$novoTitulo[1];
-                else
-                    $novoTitulo = "[NÃO CONFIRMADO] ".$titulo;
-                break;
-            case 4 : 
-                $novoTitulo = explode("[PENDENTE]", $titulo);
-                if (count($novoTitulo) > 1)
-                    $novoTitulo = $novoTitulo[1];
-                else
-                    $novoTitulo = $titulo;
-                break;
-        endswitch;        
+        $status = array(0 => '[PENDENTE] ', 1 => '[APROVADA]', 2 => '[NÃO APROVADA] ',3 => '[RESERVA TÉCNICA] ', 4 => ' ', 5 => '[CANCELADA] ');
+        //return $status;
         
+        $flags = explode(" ", $titulo);
+        
+        
+        if($novoStatus != 1)
+        {            
+            for ($i =0; $i < count($flags); $i++)
+            {
+                if ($i == 0){                    
+                    $novoTitulo = $status[$novoStatus] . " ";
+                }
+                else
+                {
+                    $novoTitulo .= $flags[$i] . " ";
+                }    
+
+
+            }
+            $novoTitulo = trim($novoTitulo);
+        }
+        else
+        {
+            //Pré-reserva aprovada - remover o "pré-reserva do título
+            $novoTitulo = explode("Pré-reserva", $titulo);
+            $novoTitulo = $novoTitulo[1];
+        }    
+
+        return "Google: " .$titulo. " Novo: " .$novoTitulo;
+
         $event->name = $novoTitulo;
         if ($event->save())
             return 1;
         else
             return 0;       
     }
-    
+        
     
 }

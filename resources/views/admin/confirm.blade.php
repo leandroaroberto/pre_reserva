@@ -15,6 +15,7 @@
                         {{Form::submit('Sim',['class'=>'btn btn-success'])}}                        
                         {{Form::hidden('id',$id)}} 
                         {{Form::hidden('retorno',$retorno)}}
+                        {{Form::hidden('novoStatus',$novoStatus)}}
                         {{Form::close()}}
                         <br>
                         {{Form::open(['action'=>  $retorno,'method'=>'GET']) }}

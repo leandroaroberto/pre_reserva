@@ -35,13 +35,18 @@ Route::get('admin/pendentes', 'adminController@listarPendentes');
 Route::get('admin/canceladas', 'adminController@listarCanceladas');
 
 
-Route::put('admin/negadas','adminController@setNegadas');
-Route::put('admin/aguardando-formulario','adminController@setAguardandoFormulario');
-Route::put('admin/reserva-tecnica','adminController@setReservaTecnica');
-Route::put('admin/aprovadas','adminController@setAprovadas');
-Route::put('admin/canceladas','adminController@setCanceladas');
+//Route::put('admin/negadas','adminController@setNegadas');
+Route::put('admin/negadas','adminController@setStatus');
+Route::put('admin/aguardando-formulario','adminController@setStatus');
+Route::put('admin/reserva-tecnica','adminController@setStatus');
+Route::put('admin/aprovadas','adminController@setStatus');
+Route::put('admin/canceladas','adminController@setStatus');
 
 Route::post('admin/aguardando-formulario', 'adminController@showConfirm');
+Route::post('admin/negadas', 'adminController@showConfirm');
+Route::post('admin/reserva-tecnica', 'adminController@showConfirm');
+Route::post('admin/aprovadas', 'adminController@showConfirm');
+Route::post('admin/canceladas', 'adminController@showConfirm');
 
 
 Route::resource('admin', 'adminController');
