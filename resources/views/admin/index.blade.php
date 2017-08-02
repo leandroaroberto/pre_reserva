@@ -19,7 +19,15 @@
         
             @foreach($dados as $dado)
                 <tr>                    
-                    <td>{{ $dado->data_reserva }}</td>            
+                    <?php
+                        $data = ""; $hora = "";
+                        $data = explode(" ",$dado->data_reserva);
+                        $hora = explode(":", $data[1]);
+                        $hora = $hora[0] . ":" . $hora[1];
+                        $data = explode("-", $data[0]);
+                        $data = $data[2]."/".$data[1]."/".$data[0];    
+                    ?>
+                    <td>{{ $data }} {{ $hora }}</td>            
                     <td>{{ $dado->pre_reserva->evento }}</td>
                     <td>{{ $dado->pre_reserva->professor }}</td>            
                     <td>
