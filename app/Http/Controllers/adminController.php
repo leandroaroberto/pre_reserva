@@ -95,7 +95,7 @@ class adminController extends Controller
         $result = $this->updateGCalendar($gid,$dados->status); 
         //$result = trim($result);
         //teste
-        return $result;
+        //return $result . " - Novo status: " .$novoStatus;
         
         
         if ($result){
@@ -135,7 +135,7 @@ class adminController extends Controller
         //UPDATE Google Agenda
         $event = Event::find($gid);
         $titulo = $event->name;
-        $status = array(0 => '[PENDENTE] ', 1 => '[APROVADA]', 2 => '[NÃO APROVADA] ',3 => '[RESERVA TÉCNICA] ', 4 => ' ', 5 => '[CANCELADA] ');
+        $status = array(0 => '[PENDENTE] ', 1 => '[APROVADA]', 2 => '[NÃO APROVADA] ',3 => '[RESERVA_TÉCNICA] ', 4 => ' ', 5 => '[CANCELADA] ');
         //return $status;
         
         $flags = explode(" ", $titulo);
@@ -164,7 +164,7 @@ class adminController extends Controller
             $novoTitulo = $novoTitulo[1];
         }    
 
-        return "Google: " .$titulo. " Novo: " .$novoTitulo;
+        //return "Google: " .$titulo. " Novo: " .$novoTitulo;
 
         $event->name = $novoTitulo;
         if ($event->save())

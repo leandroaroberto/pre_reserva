@@ -82,40 +82,91 @@
     @endif
 
     @if($link == "aguardando-formulario")
+        <p>
+            <!-- Aguardando formulario -->
+            {{ Form::open(['action' => 'adminController@showConfirm','method'=>'POST']) }}
+            {{ Form::hidden('id',$id)}} 
+            {{ Form::hidden('novoStatus',1) }}
+            {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
+            {{ Form::hidden('statusB','APROVADA')}}
+            {{ Form::hidden('metodo','adminController@setStatus')}}
+            {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
+            {{ Form::submit('Aprovar pré-reserva',['class'=>'btn btn-success center-block'])}}  
+            {{ Form::close() }}
+        <br />
+            {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
+            {{ Form::hidden('id',$id)}}
+            {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
+            {{ Form::hidden('statusB','NÃO CONFIRMADA')}}
+            {{ Form::hidden('novoStatus',2) }}
+            {{ Form::hidden('metodo','adminController@setStatus')}}
+            {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
+            {{ Form::submit('Não Confirmar', ['class'=>'btn btn-danger center-block'])}}
+            {{ Form::close() }}
+        <br />
+            {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
+            {{ Form::hidden('id',$id)}}
+            {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
+            {{ Form::hidden('statusB','CANCELADA')}}
+            {{ Form::hidden('novoStatus',5) }}
+            {{ Form::hidden('metodo','adminController@setStatus')}}
+            {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
+            {{ Form::submit('Cancelar', ['class'=>'btn btn-info center-block'])}}
+            {{ Form::close() }}
+
+    @endif
+        </p>
+        
+    @if($link == "aprovadas")
+        <p>
+            <!-- aprovadas -->        
+            {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
+            {{ Form::hidden('id',$id)}}
+            {{ Form::hidden('statusA','APROVADA')}}
+            {{ Form::hidden('statusB','CANCELADA')}}
+            {{ Form::hidden('novoStatus',5) }}
+            {{ Form::hidden('metodo','adminController@setStatus')}}
+            {{ Form::hidden('retorno','adminController@listarAprovadas')}}
+            {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-info center-block'])}}
+            {{ Form::close() }}
+
+    @endif
+        </p>
+        
+        
+    @if($link == "negadas")
+        <p>
+            <!-- negadas -->        
+            {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
+            {{ Form::hidden('id',$id)}}
+            {{ Form::hidden('statusA','NÃO CONFIRMADA')}}
+            {{ Form::hidden('statusB','AGUARDANDO FORMULÁRIO')}}
+            {{ Form::hidden('novoStatus',4) }}
+            {{ Form::hidden('metodo','adminController@setStatus')}}
+            {{ Form::hidden('retorno','adminController@listarNegadas')}}
+            {{ Form::submit('Mudar status para Aguardando formulário', ['class'=>'btn btn-success center-block'])}}
+            {{ Form::close() }}
+
+    @endif
+        </p>  
+        
+
+    @if($link == "reserva-tecnica")
     <p>
-        <!-- Aguardando formulario -->
-        {{ Form::open(['action' => 'adminController@showConfirm','method'=>'POST']) }}
-        {{ Form::hidden('id',$id)}} 
-        {{ Form::hidden('novoStatus',1) }}
-        {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
-        {{ Form::hidden('statusB','APROVADA')}}
-        {{ Form::hidden('metodo','adminController@setStatus')}}
-        {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
-        {{ Form::submit('Aprovar pré-reserva',['class'=>'btn btn-success center-block'])}}  
-        {{ Form::close() }}
-    <br />
+        <!-- reserva técnica -->
         {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
         {{ Form::hidden('id',$id)}}
-        {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
-        {{ Form::hidden('statusB','NÃO CONFIRMADO')}}
-        {{ Form::hidden('novoStatus',2) }}
-        {{ Form::hidden('metodo','adminController@setStatus')}}
-        {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
-        {{ Form::submit('Não Confirmar', ['class'=>'btn btn-danger center-block'])}}
-        {{ Form::close() }}
-    <br />
-        {{ Form::open(['action'=>'adminController@showConfirm','method'=>'POST']) }}
-        {{ Form::hidden('id',$id)}}
-        {{ Form::hidden('statusA','AGUARDANDO FORMULÁRIO')}}
-        {{ Form::hidden('statusB','CANCELADO')}}
+        {{ Form::hidden('statusA','RESERVA TÉCNICA')}}
+        {{ Form::hidden('statusB','CANCELADA')}}
         {{ Form::hidden('novoStatus',5) }}
         {{ Form::hidden('metodo','adminController@setStatus')}}
-        {{ Form::hidden('retorno','adminController@listarPreReservadas')}}
-        {{ Form::submit('Não Confirmar', ['class'=>'btn btn-info center-block'])}}
+        {{ Form::hidden('retorno','adminController@listarReservaTecnica')}}
+        {{ Form::submit('Cancelar Pré-reserva', ['class'=>'btn btn-danger center-block'])}}
         {{ Form::close() }}
-    
+
     @endif
-    
+    </p>
+        
     <p>
         <a href="{{env('APP_URL')}}/admin/{{$link}}" class="center-block btn">Voltar</a>    
     </p>
