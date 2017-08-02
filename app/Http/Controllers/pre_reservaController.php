@@ -1,5 +1,4 @@
 <?php
-
 namespace ead\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -43,6 +42,7 @@ class pre_reservaController extends Controller
         $created_at = date("Y-m-d H:i:s");
         $pre_reserva->created_at = $created_at;
         
+        
         $pre_reserva->save();
         
         $pre_reserva_id = $pre_reserva->getKey();
@@ -56,12 +56,11 @@ class pre_reservaController extends Controller
         $pre_reserva_datas->data_reserva = $data_reserva;
         $pre_reserva_datas->status = 0;
         $pre_reserva_datas->pre_reserva_id = $pre_reserva_id;
+        $pre_reserva_datas->gid = $this->calendar($request->all(),$created_at);
+        
         
         if ($pre_reserva_datas->save()){            
-            if ($this->sendMail($request->all())){
-                if (! $this->calendar($request->all(),$created_at))
-                    return view('form')->with(['mensagem' =>'Erro ao acessar o Google Calendar. A operação foi cancelada. Tente novamente mais tarde.','css'=>'alert alert-danger']);
-                    
+            if ($this->sendMail($request->all())){                
                 return view('form')->with(['mensagem'=> 'Obrigado! Sua pré-reserva será analisada e entraremos em contato em breve.','css'=>'alert alert-info']);            
             }
             else
@@ -114,10 +113,7 @@ class pre_reservaController extends Controller
             return 0;*/
         return 1; //test mode
     }
-    
-    public function listarPedidos(){
-        //tela de admin para gerencia de pedidos
-    }
+        
     
    //Método para pré-reserva no Google Calendar
     
@@ -143,8 +139,10 @@ class pre_reservaController extends Controller
         $event->description .= "Data de criação: ". $created_at;
         
         
-        if ($event->save())
-            return 1;
+        if ($calendarEvent = $event->save()){                        
+            return $calendarEvent->id;
+            //return 1;            
+        }    
         else
             return 0;
         

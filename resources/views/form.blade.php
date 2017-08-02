@@ -8,7 +8,7 @@
     {{ $mensagem }}    
 </div>
 <div class="center-block">     
-    <a href="/">Fazer nova pré-reserva</a>
+    <a href="{{env('APP_URL')}}/">Fazer nova pré-reserva</a>
 </div>
 
 @else
