@@ -135,7 +135,7 @@ class adminController extends Controller
         //UPDATE Google Agenda
         $event = Event::find($gid);
         $titulo = $event->name;
-        $status = array(0 => '[PENDENTE] ', 1 => '[APROVADA]', 2 => '[NÃO APROVADA] ',3 => '[RESERVA_TÉCNICA] ', 4 => ' ', 5 => '[CANCELADA] ');
+        $status = array(0 => '[PENDENTE] ', 1 => null, 2 => '[NÃO_CONFIRMADA] ',3 => '[RESERVA_TÉCNICA] ', 4 => null, 5 => '[CANCELADA] ');
         //return $status;
         
         $flags = explode(" ", $titulo);
