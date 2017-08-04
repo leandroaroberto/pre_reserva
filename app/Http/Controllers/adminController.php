@@ -10,10 +10,8 @@ use Carbon\Carbon;
 
 class adminController extends Controller
 {
-    
-    //const STATUS = array([0 => '[PENDENTE]',1 => '',2 => '[NÃO APROVADA]',3 => '[RESERVA TÉCNICA]', 4 => '', 5 => '[CANCELADA]']);
-    
-     public function __construct()
+
+    public function __construct()
     {
         $this->middleware('auth');
     }    
@@ -92,10 +90,9 @@ class adminController extends Controller
         $dados->status = $novoStatus;                        
         $gid = $dados->gid;                        
         
+        //atualiza label do google calendar
         $result = $this->updateGCalendar($gid,$dados->status); 
-        //$result = trim($result);
-        //teste
-        //return $result . " - Novo status: " .$novoStatus;
+        //return $result;
         
         
         if ($result){
@@ -129,48 +126,49 @@ class adminController extends Controller
         
         return view('admin.confirm')->with(['statusA'=>$a, 'statusB'=> $b, 'metodo'=> $metodo, 'id'=> $id, 'retorno'=>$retorno, 'novoStatus'=> $novoStatus]);        
     }
-    
+         
     
     private function updateGCalendar($gid,$novoStatus){
         //UPDATE Google Agenda
         $event = Event::find($gid);
         $titulo = $event->name;
-        $status = array(0 => '[PENDENTE] ', 1 => null, 2 => '[NÃO_CONFIRMADA] ',3 => '[RESERVA_TÉCNICA] ', 4 => null, 5 => '[CANCELADA] ');
-        //return $status;
+        $status = array(0 => '[PENDENTE] ', 1 => null, 2 => '[NÃO_CONFIRMADA] Pré-reserva ',3 => '[RESERVA_TÉCNICA] Pré-reserva ', 4 => 'Pré-reserva ', 5 => '[CANCELADA] Pré-reserva ');
         
-        $flags = explode(" ", $titulo);
-        
+        $flags = explode(" ", $titulo);  
+        if (trim($flags[0]) == "Pré-reserva")
+            array_shift ($flags);
+        if (trim($flags[1]) == "Pré-reserva")
+            array_shift ($flags);
         
         if($novoStatus != 1)
         {            
             for ($i =0; $i < count($flags); $i++)
             {
                 if ($i == 0){                    
-                    $novoTitulo = $status[$novoStatus] . " ";
-                }
+                    $novoTitulo = $status[$novoStatus];
+                }                
                 else
                 {
                     $novoTitulo .= $flags[$i] . " ";
-                }    
-
-
+                }
             }
             $novoTitulo = trim($novoTitulo);
-        }
+        }            
         else
         {
             //Pré-reserva aprovada - remover o "pré-reserva do título
             $novoTitulo = explode("Pré-reserva", $titulo);
-            $novoTitulo = $novoTitulo[1];
+            if (count($novoTitulo)> 1)
+                $novoTitulo = $novoTitulo[1];
+            else
+                $novoTitulo = $titulo;
         }    
-
-        //return "Google: " .$titulo. " Novo: " .$novoTitulo;
 
         $event->name = $novoTitulo;
         if ($event->save())
             return 1;
         else
-            return 0;       
+            return 0;      
     }
         
     
