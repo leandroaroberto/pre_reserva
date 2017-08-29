@@ -42,6 +42,10 @@
     {{ Form::text('professor','',['class'=>'form-control','required','placeholder'=>'Professor da UNICAMP responsável pelo evento']) }}
     </p>
     <p>
+    {{ Form::label('instituicao','Instituição*:') }}
+    {{ Form::text('instituicao','',['class'=>'form-control','required','placeholder'=>'Instituição']) }}
+    </p>
+    <p>
      {{ Form::label('evento','Evento*:') }}
      {{ Form::select('evento',
              ['Seminario' => 'Seminário',

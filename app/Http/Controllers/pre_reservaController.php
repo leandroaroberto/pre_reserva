@@ -25,6 +25,7 @@ class pre_reservaController extends Controller
         'nome' => 'required|max:50',
         'email' => 'required|max:100|e-mail',
         'professor'=> 'required|max:50',
+        'instituicao'=>'required|max:100',
         'evento' => 'required',
         'fone' => 'max:20',
         'data_reserva' => 'required|date',
@@ -37,6 +38,7 @@ class pre_reservaController extends Controller
         $pre_reserva->email = $request->input('email');
         $pre_reserva->fone = $request->input('fone');
         $pre_reserva->professor = $request->input('professor');
+        $pre_reserva->instituicao = $request->input('instituicao');
         $pre_reserva->evento = $request->input('evento');
         $pre_reserva->obs = $request->input('obs');
         $created_at = date("Y-m-d H:i:s");
@@ -92,6 +94,7 @@ class pre_reservaController extends Controller
         $message .= "<p>Data: <b>$data</b> Horário: <b>".$dados['horario']."</b></p>";
         /*$message .= "<p>Disponibilidade na Agenda: <b><a href'#'>$disponivel</a></b></p>";*/
         $message .= "<p>Professor Responsável: <b>".$dados['professor']."</b></p>";
+        $message .= "<p>Instituição: <b>".$dados['instituicao']."</b></p>";
         $message .= "<p>Nome do Solicitante: <b>". $dados['nome']."</b></p>";
         $message .= "<p>E-mail: <b>". $dados['email']."</b></p>";
         $message .= "<p>Telefone: <b>". $dados['fone'] . "</b></p>";
@@ -134,6 +137,7 @@ class pre_reservaController extends Controller
         
         $event->endDateTime = \Carbon\Carbon::create($ano,$mes,$dia,$horario + 3,"00","00","America/Sao_Paulo");                                 
         $event->description = "Solicitante: ".$dados['nome']."\n";
+        $event->description .= "Instituição: ".$dados['instituicao']."\n";
         $event->description .= "Evento: ". $evento. "\n";
         $event->description .= "E-mail: ". $dados['email']. "\n";
         $event->description .= "Data de criação: ". $created_at;

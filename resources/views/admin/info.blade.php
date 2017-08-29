@@ -4,6 +4,7 @@
         foreach($dados as $dado){
             $id = $dado->id;
             $nome = $dado->nome;
+            $instituicao = $dado->instituicao;
             $evento = $dado->evento;
             $professor = $dado->professor;
             $email = $dado->email;
@@ -29,6 +30,9 @@
     </p>
     <p>
         Professor: <b>{{ $professor }}</b>
+    </p>
+    <p>
+        Instituição: <b>{{ $instituicao }}</b>
     </p>
     @if($obs != "")
         <p>
