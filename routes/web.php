@@ -51,3 +51,7 @@ Route::post('admin/canceladas', 'adminController@showConfirm');
 
 Route::resource('admin', 'adminController');
 
+//mailgun
+
+Route::get('contato','ContatoController@index');
+Route::post('contato/enviar','ContatoController@enviar');
