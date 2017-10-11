@@ -40,7 +40,7 @@ class pre_reservaController extends Controller
         $pre_reserva->professor = $request->input('professor');
         $pre_reserva->instituicao = $request->input('instituicao');
         $pre_reserva->evento = $request->input('evento');
-        $pre_reserva->obs = $request->input('obs');
+        $pre_reserva->obs = $request->input('obs');                
         $created_at = date("Y-m-d H:i:s");
         $pre_reserva->created_at = $created_at;
         
@@ -48,6 +48,14 @@ class pre_reservaController extends Controller
         $pre_reserva->save();
         
         $pre_reserva_id = $pre_reserva->getKey();
+        
+        //Gera o token
+        $hash = $request->input('email') . $request->input('professor') . $request->input('data_reserva');
+        $hash = trim($hash);
+        $update = Pre_reserva::find($pre_reserva_id);
+        $update->pre_reserva_token = base64_encode($hash);
+        $update->save();
+        
         
         //grava na tabela pre_reserva_datas
         $pre_reserva_datas = new Pre_reserva_datas();
